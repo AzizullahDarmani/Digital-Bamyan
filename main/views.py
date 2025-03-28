@@ -59,6 +59,34 @@ def place_detail(request, place_id):
     place = get_object_or_404(Place, id=place_id)
     return render(request, 'main/place_detail.html', {'place': place})
 
+@user_passes_test(is_superuser)
+def edit_place(request, place_id):
+    place = get_object_or_404(Place, id=place_id)
+    if request.method == 'POST':
+        place.name = request.POST.get('name')
+        place.description = request.POST.get('description')
+        place.location = request.POST.get('location')
+        place.location_url = request.POST.get('location_url')
+        if 'image' in request.FILES:
+            place.image = request.FILES['image']
+        place.save()
+        
+        if 'gallery' in request.FILES:
+            for img in request.FILES.getlist('gallery'):
+                place_image = PlaceImage.objects.create(image=img)
+                place.gallery.add(place_image)
+                
+        return redirect('main:places')
+    return render(request, 'main/edit_place.html', {'place': place})
+
+@user_passes_test(is_superuser)
+def delete_place(request, place_id):
+    if request.method == 'POST':
+        place = get_object_or_404(Place, id=place_id)
+        place.delete()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error'}, status=400)
+
 @login_required
 def toggle_like(request, place_id):
     place = get_object_or_404(Place, id=place_id)

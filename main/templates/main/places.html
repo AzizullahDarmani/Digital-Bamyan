@@ -1,11 +1,10 @@
-
 {% extends 'main/base.html' %}
 {% block title %}Places in Bamyan{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold mb-8">Places in Bamyan</h1>
-    
+
     {% if user.is_superuser %}
     <div class="mb-8">
         <a href="{% url 'main:add_place' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
@@ -13,7 +12,7 @@
         </a>
     </div>
     {% endif %}
-    
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for place in places %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -23,19 +22,25 @@
                 {% endif %}
                 <div class="p-4">
                     <h2 class="text-xl font-semibold">{{ place.name }}</h2>
+                    {% if user.is_superuser %}
+                    <div class="flex justify-end mt-2 space-x-2">
+                        <a href="{% url 'main:edit_place' place.id %}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Edit</a>
+                        <button onclick="deletePlace({{ place.id }})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                    </div>
+                    {% endif %}
                 </div>
             </a>
         </div>
         {% endfor %}
     </div>
-    
+
     {% if places.has_other_pages %}
     <div class="flex justify-center mt-8">
         <div class="flex space-x-2">
             {% if places.has_previous %}
             <a href="?page={{ places.previous_page_number }}" class="px-3 py-2 bg-gray-200 rounded">Previous</a>
             {% endif %}
-            
+
             {% if places.has_next %}
             <a href="?page={{ places.next_page_number }}" class="px-3 py-2 bg-gray-200 rounded">Next</a>
             {% endif %}
