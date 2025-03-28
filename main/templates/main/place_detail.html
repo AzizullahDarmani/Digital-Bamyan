@@ -5,7 +5,18 @@
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <img src="{{ place.image.url }}" alt="{{ place.name }}" class="w-full h-96 object-cover">
+        <div class="relative">
+            <img id="mainImage" src="{{ place.image.url }}" alt="{{ place.name }}" class="w-full h-96 object-cover">
+            
+            {% if place.gallery.all %}
+            <button onclick="previousImage()" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 hover:bg-opacity-75">
+                ←
+            </button>
+            <button onclick="nextImage()" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-4 hover:bg-opacity-75">
+                →
+            </button>
+            {% endif %}
+        </div>
         
         <div class="p-6">
             <div class="flex justify-between items-center mb-4">
@@ -36,24 +47,35 @@
                 </div>
                 {% endif %}
             </div>
-            
-            {% if place.gallery.all %}
-            <div class="mb-8">
-                <h2 class="text-xl font-semibold mb-4">Gallery</h2>
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {% for img in place.gallery.all %}
-                    <div class="aspect-w-16 aspect-h-9">
-                        <img src="{{ img.image.url }}" alt="{{ img.caption }}" class="rounded object-cover w-full h-full">
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
         </div>
     </div>
 </div>
 
 <script>
+let currentImageIndex = 0;
+const images = [
+    { url: "{{ place.image.url }}", caption: "{{ place.name }}" }
+    {% for img in place.gallery.all %},
+    { url: "{{ img.image.url }}", caption: "{{ img.caption }}" }
+    {% endfor %}
+];
+
+function showImage(index) {
+    const mainImage = document.getElementById('mainImage');
+    mainImage.src = images[index].url;
+    mainImage.alt = images[index].caption;
+}
+
+function nextImage() {
+    currentImageIndex = (currentImageIndex + 1) % images.length;
+    showImage(currentImageIndex);
+}
+
+function previousImage() {
+    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+    showImage(currentImageIndex);
+}
+
 function toggleLike(placeId) {
     fetch(`/places/${placeId}/like/`, {
         method: 'POST',
