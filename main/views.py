@@ -30,6 +30,29 @@ def places_list(request):
     places = paginator.get_page(page)
     return render(request, 'main/places.html', {'places': places})
 
+@user_passes_test(is_superuser)
+def add_place(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        location = request.POST.get('location')
+        image = request.FILES.get('image')
+        gallery_images = request.FILES.getlist('gallery')
+
+        place = Place.objects.create(
+            name=name,
+            description=description,
+            location=location,
+            image=image
+        )
+
+        for img in gallery_images:
+            place_image = PlaceImage.objects.create(image=img)
+            place.gallery.add(place_image)
+
+        return redirect('main:places')
+    return render(request, 'main/add_place.html')
+
 def place_detail(request, place_id):
     place = get_object_or_404(Place, id=place_id)
     return render(request, 'main/place_detail.html', {'place': place})
