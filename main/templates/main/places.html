@@ -34,6 +34,27 @@
         {% endfor %}
     </div>
 
+<script>
+function deletePlace(placeId) {
+    if (confirm('Are you sure you want to delete this place?')) {
+        fetch(`/places/${placeId}/delete/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                window.location.reload();
+            } else {
+                alert('Error deleting place');
+            }
+        });
+    }
+}
+</script>
+
     {% if places.has_other_pages %}
     <div class="flex justify-center mt-8">
         <div class="flex space-x-2">
