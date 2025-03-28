@@ -32,7 +32,9 @@ def signup(request):
             user = form.save()
             login(request, user)
             return redirect('main:home')
-    return render(request, 'main/signup.html')
+    else:
+        form = UserCreationForm()
+    return render(request, 'main/signup.html', {'form': form})
 
 def login_view(request):
     if request.method == 'POST':
