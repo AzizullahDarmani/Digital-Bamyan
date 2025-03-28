@@ -43,6 +43,13 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {% for img in place.gallery.all %}
                     <div class="aspect-w-16 aspect-h-9">
+                        <img src="{{ img.image.url }}" alt="{{ img.caption }}" class="rounded object-cover w-full h-full">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}ry.all %}
+                    <div class="aspect-w-16 aspect-h-9">
                         <img src="{{ img.image.url }}" alt="{{ img.caption }}" class="rounded object-cover">
                     </div>
                     {% endfor %}
