@@ -15,9 +15,46 @@ def home(request):
         'guides': guides
     })
 
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.core.paginator import Paginator
+
+def is_superuser(user):
+    return user.is_superuser
+
 def places_list(request):
-    places = Place.objects.all()
+    places = Place.objects.all().order_by('-created_at')
+    paginator = Paginator(places, 12)
+    page = request.GET.get('page')
+    places = paginator.get_page(page)
     return render(request, 'main/places.html', {'places': places})
+
+def place_detail(request, place_id):
+    place = get_object_or_404(Place, id=place_id)
+    return render(request, 'main/place_detail.html', {'place': place})
+
+@login_required
+def toggle_like(request, place_id):
+    place = get_object_or_404(Place, id=place_id)
+    if request.user in place.likes.all():
+        place.likes.remove(request.user)
+        liked = False
+    else:
+        place.likes.add(request.user)
+        liked = True
+    return JsonResponse({'liked': liked, 'count': place.likes.count()})
+
+@login_required
+def toggle_favorite(request, place_id):
+    place = get_object_or_404(Place, id=place_id)
+    if request.user in place.favorites.all():
+        place.favorites.remove(request.user)
+        favorited = False
+    else:
+        place.favorites.add(request.user)
+        favorited = True
+    return JsonResponse({'favorited': favorited})
 
 def hotels_list(request):
     hotels = Hotel.objects.all()

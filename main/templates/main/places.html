@@ -1,0 +1,46 @@
+
+{% extends 'main/base.html' %}
+{% block title %}Places in Bamyan{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Places in Bamyan</h1>
+    
+    {% if user.is_superuser %}
+    <div class="mb-8">
+        <a href="{% url 'admin:main_place_add' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Add New Place
+        </a>
+    </div>
+    {% endif %}
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for place in places %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <a href="{% url 'main:place_detail' place.id %}">
+                {% if place.image %}
+                <img src="{{ place.image.url }}" alt="{{ place.name }}" class="w-full h-48 object-cover">
+                {% endif %}
+                <div class="p-4">
+                    <h2 class="text-xl font-semibold">{{ place.name }}</h2>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    
+    {% if places.has_other_pages %}
+    <div class="flex justify-center mt-8">
+        <div class="flex space-x-2">
+            {% if places.has_previous %}
+            <a href="?page={{ places.previous_page_number }}" class="px-3 py-2 bg-gray-200 rounded">Previous</a>
+            {% endif %}
+            
+            {% if places.has_next %}
+            <a href="?page={{ places.next_page_number }}" class="px-3 py-2 bg-gray-200 rounded">Next</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

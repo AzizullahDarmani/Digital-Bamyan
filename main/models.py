@@ -6,11 +6,22 @@ class Place(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
     location = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='places/')
+    image = models.ImageField(upload_to='places/', verbose_name='Main Image')
+    gallery = models.ManyToManyField('PlaceImage', blank=True)
+    rating = models.FloatField(default=0.0)
+    likes = models.ManyToManyField('auth.User', related_name='liked_places', blank=True)
+    favorites = models.ManyToManyField('auth.User', related_name='favorite_places', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return self.name
+
+class PlaceImage(models.Model):
+    image = models.ImageField(upload_to='places/gallery/')
+    caption = models.CharField(max_length=200, blank=True)
+    
+    def __str__(self):
+        return f"Image for {self.place_set.first()}"
 
 class Hotel(models.Model):
     name = models.CharField(max_length=200)
