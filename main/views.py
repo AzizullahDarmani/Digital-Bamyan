@@ -36,6 +36,7 @@ def add_place(request):
         name = request.POST.get('name')
         description = request.POST.get('description')
         location = request.POST.get('location')
+        location_url = request.POST.get('location_url')
         image = request.FILES.get('image')
         gallery_images = request.FILES.getlist('gallery')
 
@@ -43,6 +44,7 @@ def add_place(request):
             name=name,
             description=description,
             location=location,
+            location_url=location_url,
             image=image
         )
 

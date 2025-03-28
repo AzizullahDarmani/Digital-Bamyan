@@ -28,6 +28,13 @@
             <div class="mb-8">
                 <h2 class="text-xl font-semibold mb-2">About this place</h2>
                 <p class="text-gray-700">{{ place.description }}</p>
+                {% if place.location_url %}
+                <div class="mt-4">
+                    <a href="{{ place.location_url }}" target="_blank" class="text-blue-600 hover:text-blue-800">
+                        View on Map 🗺️
+                    </a>
+                </div>
+                {% endif %}
             </div>
             
             {% if place.gallery.all %}

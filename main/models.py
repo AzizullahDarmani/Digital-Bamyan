@@ -6,6 +6,7 @@ class Place(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
     location = models.CharField(max_length=200)
+    location_url = models.URLField(max_length=500, blank=True, help_text="URL to location on map")
     image = models.ImageField(upload_to='places/', verbose_name='Main Image')
     gallery = models.ManyToManyField('PlaceImage', blank=True)
     rating = models.FloatField(default=0.0)
