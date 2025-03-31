@@ -23,9 +23,16 @@
         <div class="relative group">
             <img src="{{ img.image.url }}" alt="{{ img.caption }}" class="w-full h-64 object-cover rounded-lg">
             {% if user.is_authenticated %}
-            <button onclick="toggleImageFavorite({{ img.id }})" class="absolute top-2 right-2 bg-white rounded-full p-2">
-                <span id="favIcon{{ img.id }}" class="{% if img in user.favoriteimage_set.all %}text-yellow-500{% endif %}">★</span>
-            </button>
+            <div class="absolute top-2 right-2 flex flex-col gap-2">
+                <button onclick="toggleImageFavorite({{ img.id }})" class="bg-white rounded-full p-2">
+                    <span id="favIcon{{ img.id }}" class="{% if img in user.favoriteimage_set.all %}text-yellow-500{% endif %}">★</span>
+                </button>
+                {% if user.is_superuser %}
+                <button onclick="deleteImage({{ img.id }})" class="bg-white rounded-full p-2">
+                    <span class="text-red-500">✕</span>
+                </button>
+                {% endif %}
+            </div>
             {% endif %}
         </div>
         {% endfor %}
@@ -45,6 +52,23 @@ function toggleImageFavorite(imageId) {
         const icon = document.getElementById(`favIcon${imageId}`);
         icon.className = data.favorited ? 'text-yellow-500' : '';
     });
+}
+
+function deleteImage(imageId) {
+    if (confirm('Are you sure you want to delete this image?')) {
+        fetch(`/images/${imageId}/delete/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                window.location.reload();
+            }
+        });
+    }
 }
 </script>
 {% endblock %}

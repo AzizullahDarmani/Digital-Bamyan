@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .models import Place, Hotel, Guide, PlaceImage
+from .models import Place, Hotel, Guide, PlaceImage, FavoriteImage
 
 def home(request):
     places = Place.objects.all()[:6]
@@ -180,3 +180,12 @@ def favorites(request):
         'favorite_images': favorite_images,
         'favorite_places': favorite_places
     })
+
+@login_required
+@user_passes_test(is_superuser)
+def delete_image(request, image_id):
+    if request.method == 'POST':
+        image = get_object_or_404(PlaceImage, id=image_id)
+        image.delete()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error'}, status=400)
