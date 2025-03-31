@@ -56,7 +56,7 @@ function toggleImageFavorite(imageId) {
 
 function deleteImage(imageId) {
     if (confirm('Are you sure you want to delete this image?')) {
-        fetch(`/images/${imageId}/delete/`, {
+        fetch(`/places/gallery/images/${imageId}/delete/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}'

@@ -21,6 +21,6 @@ urlpatterns = [
     path('places/<int:place_id>/gallery/', views.place_gallery, name='place_gallery'),
     path('places/<int:place_id>/gallery/add/', views.add_gallery_image, name='add_gallery_image'),
     path('images/<int:image_id>/favorite/', views.toggle_favorite_image, name='toggle_favorite_image'),
-    path('images/<int:image_id>/delete/', views.delete_image, name='delete_image'),
+    path('places/gallery/images/<int:image_id>/delete/', views.delete_image, name='delete_image'),
     path('favorites/', views.favorites, name='favorites'),
 ]
