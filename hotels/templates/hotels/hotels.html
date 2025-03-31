@@ -7,7 +7,7 @@
 <div class="container mx-auto py-8">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">Hotels in Bamyan</h1>
-        {% if is_superuser %}
+        {% if request.user.is_superuser %}
         <a href="{% url 'hotels:add_hotel' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Hotel</a>
         {% endif %}
     </div>

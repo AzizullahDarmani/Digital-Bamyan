@@ -7,7 +7,7 @@ def is_superuser(user):
 
 @login_required
 def hotels_list(request):
-    hotels = Hotel.objects.all()
+    hotels = Hotel.objects.all().order_by('-created_at')
     context = {
         'hotels': hotels,
         'is_superuser': request.user.is_superuser
