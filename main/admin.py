@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from .models import Place, Hotel, Guide, PlaceImage
+from .models import Place, Hotel, Guide, PlaceImage, FavoriteImage
 
 class PlaceImageInline(admin.TabularInline):
     model = Place.gallery.through
