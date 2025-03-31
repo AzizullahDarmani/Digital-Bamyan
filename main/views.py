@@ -143,3 +143,40 @@ def logout_view(request):
 def guides_list(request):
     guides = Guide.objects.all()
     return render(request, 'main/guides.html', {'guides': guides})
+
+@login_required
+def place_gallery(request, place_id):
+    place = get_object_or_404(Place, id=place_id)
+    return render(request, 'main/place_gallery.html', {'place': place})
+
+@login_required
+@user_passes_test(is_superuser)
+def add_gallery_image(request, place_id):
+    if request.method == 'POST':
+        place = get_object_or_404(Place, id=place_id)
+        images = request.FILES.getlist('images')
+        for img in images:
+            place_image = PlaceImage.objects.create(image=img)
+            place.gallery.add(place_image)
+        return redirect('main:place_gallery', place_id=place_id)
+    return redirect('main:place_gallery', place_id=place_id)
+
+@login_required
+def toggle_favorite_image(request, image_id):
+    image = get_object_or_404(PlaceImage, id=image_id)
+    favorite, created = FavoriteImage.objects.get_or_create(
+        user=request.user,
+        image=image
+    )
+    if not created:
+        favorite.delete()
+    return JsonResponse({'favorited': created})
+
+@login_required
+def favorites(request):
+    favorite_images = FavoriteImage.objects.filter(user=request.user)
+    favorite_places = Place.objects.filter(favorites=request.user)
+    return render(request, 'main/favorites.html', {
+        'favorite_images': favorite_images,
+        'favorite_places': favorite_places
+    })

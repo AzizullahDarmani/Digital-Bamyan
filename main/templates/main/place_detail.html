@@ -20,6 +20,10 @@
         
         <div class="p-6">
             <div class="flex justify-between items-center mb-4">
+                <a href="{{ place.location_url }}" target="_blank" class="text-blue-600 hover:text-blue-800">View on Map</a>
+                <a href="{% url 'main:place_gallery' place.id %}" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">View Gallery</a>
+            </div>
+            <div class="flex justify-between items-center mb-4">
                 <h1 class="text-3xl font-bold">{{ place.name }}</h1>
                 
                 {% if user.is_authenticated %}

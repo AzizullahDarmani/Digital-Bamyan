@@ -18,4 +18,8 @@ urlpatterns = [
     path('places/<int:place_id>/favorite/', views.toggle_favorite, name='toggle_favorite'),
     path('hotels/', views.hotels_list, name='hotels'),
     path('guides/', views.guides_list, name='guides'),
+    path('places/<int:place_id>/gallery/', views.place_gallery, name='place_gallery'),
+    path('places/<int:place_id>/gallery/add/', views.add_gallery_image, name='add_gallery_image'),
+    path('images/<int:image_id>/favorite/', views.toggle_favorite_image, name='toggle_favorite_image'),
+    path('favorites/', views.favorites, name='favorites'),
 ]

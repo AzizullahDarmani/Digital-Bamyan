@@ -24,6 +24,14 @@ class PlaceImage(models.Model):
     def __str__(self):
         return f"Image for {self.place_set.first()}"
 
+class FavoriteImage(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    image = models.ForeignKey(PlaceImage, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('user', 'image')
+
 class Hotel(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()

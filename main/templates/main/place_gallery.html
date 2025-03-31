@@ -1,0 +1,50 @@
+
+{% extends 'main/base.html' %}
+{% block title %}{{ place.name }} Gallery{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">{{ place.name }} Gallery</h1>
+
+    {% if user.is_superuser %}
+    <div class="mb-8">
+        <form action="{% url 'main:add_gallery_image' place.id %}" method="POST" enctype="multipart/form-data" class="flex gap-4">
+            {% csrf_token %}
+            <input type="file" name="images" multiple required class="border p-2">
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Add Images
+            </button>
+        </form>
+    </div>
+    {% endif %}
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for img in place.gallery.all %}
+        <div class="relative group">
+            <img src="{{ img.image.url }}" alt="{{ img.caption }}" class="w-full h-64 object-cover rounded-lg">
+            {% if user.is_authenticated %}
+            <button onclick="toggleImageFavorite({{ img.id }})" class="absolute top-2 right-2 bg-white rounded-full p-2">
+                <span id="favIcon{{ img.id }}" class="{% if img in user.favoriteimage_set.all %}text-yellow-500{% endif %}">★</span>
+            </button>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function toggleImageFavorite(imageId) {
+    fetch(`/images/${imageId}/favorite/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const icon = document.getElementById(`favIcon${imageId}`);
+        icon.className = data.favorited ? 'text-yellow-500' : '';
+    });
+}
+</script>
+{% endblock %}
