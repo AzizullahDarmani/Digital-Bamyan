@@ -8,6 +8,25 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
+            <h2 class="text-2xl font-semibold mb-4">Favorite Places</h2>
+            <div class="space-y-4">
+                {% for place in favorite_places %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <a href="{% url 'main:place_detail' place.id %}" class="block">
+                        <img src="{{ place.image.url }}" alt="{{ place.name }}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-xl font-semibold">{{ place.name }}</h3>
+                            <p class="text-gray-600">{{ place.location }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% empty %}
+                <p class="text-gray-500">No favorite places yet</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div>
             <h2 class="text-2xl font-semibold mb-4">Favorite Images</h2>
             <div class="grid grid-cols-2 gap-4">
                 {% for fav in favorite_images %}
@@ -17,23 +36,8 @@
                         <span class="text-yellow-500">★</span>
                     </button>
                 </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div>
-            <h2 class="text-2xl font-semibold mb-4">Favorite Places</h2>
-            <div class="space-y-4">
-                {% for place in favorite_places %}
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <a href="{% url 'main:place_detail' place.id %}">
-                        <img src="{{ place.image.url }}" alt="{{ place.name }}" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <h3 class="text-xl font-semibold">{{ place.name }}</h3>
-                            <p class="text-gray-600">{{ place.location }}</p>
-                        </div>
-                    </a>
-                </div>
+                {% empty %}
+                <p class="text-gray-500">No favorite images yet</p>
                 {% endfor %}
             </div>
         </div>

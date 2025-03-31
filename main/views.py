@@ -174,8 +174,8 @@ def toggle_favorite_image(request, image_id):
 
 @login_required
 def favorites(request):
-    favorite_images = FavoriteImage.objects.filter(user=request.user)
-    favorite_places = Place.objects.filter(favorites=request.user)
+    favorite_images = FavoriteImage.objects.filter(user=request.user).select_related('image')
+    favorite_places = Place.objects.filter(favorites=request.user).prefetch_related('likes')
     return render(request, 'main/favorites.html', {
         'favorite_images': favorite_images,
         'favorite_places': favorite_places
