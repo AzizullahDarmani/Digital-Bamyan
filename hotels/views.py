@@ -1,13 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from .models import Hotel
 
 def is_superuser(user):
     return user.is_superuser
 
+@login_required
 def hotels_list(request):
     hotels = Hotel.objects.all()
-    return render(request, 'hotels/hotels.html', {'hotels': hotels})
+    context = {
+        'hotels': hotels,
+        'is_superuser': request.user.is_superuser
+    }
+    return render(request, 'hotels/hotels.html', context)
 
 @user_passes_test(is_superuser)
 def add_hotel(request):
