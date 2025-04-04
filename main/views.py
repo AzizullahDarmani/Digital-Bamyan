@@ -110,8 +110,7 @@ def toggle_favorite(request, place_id):
     return JsonResponse({'favorited': favorited})
 
 def hotels_list(request):
-    hotels = Hotel.objects.all()
-    return render(request, 'main/hotels.html', {'hotels': hotels})
+    return redirect('hotel:hotel_list')
 
 
 
