@@ -110,7 +110,7 @@ def toggle_favorite(request, place_id):
     return JsonResponse({'favorited': favorited})
 
 def hotels_list(request):
-    return redirect('hotel:hotel_list')
+    return redirect('/hotel/')
 
 
 
