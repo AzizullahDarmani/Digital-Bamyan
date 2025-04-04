@@ -1,0 +1,39 @@
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/urls/resolvers.py", line 740, in url_patterns
+    iter(patterns)
+TypeError: 'module' object is not iterable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/workspace/manage.py", line 22, in <module>
+    main()
+  File "/home/runner/workspace/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
+    utility.execute()
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/core/management/__init__.py", line 436, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/core/management/base.py", line 413, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/core/management/base.py", line 459, in execute
+    output = self.handle(*args, **options)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/core/management/base.py", line 107, in wrapper
+    res = handle_func(*args, **kwargs)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/core/management/commands/migrate.py", line 100, in handle
+    self.check(databases=[database])
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/core/management/base.py", line 486, in check
+    all_issues = checks.run_checks(
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/core/checks/registry.py", line 88, in run_checks
+    new_errors = check(app_configs=app_configs, databases=databases)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/core/checks/urls.py", line 42, in check_url_namespaces_unique
+    all_namespaces = _load_all_namespaces(resolver)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/core/checks/urls.py", line 72, in _load_all_namespaces
+    namespaces.extend(_load_all_namespaces(pattern, current))
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/core/checks/urls.py", line 61, in _load_all_namespaces
+    url_patterns = getattr(resolver, "url_patterns", [])
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/urls/resolvers.py", line 748, in url_patterns
+    raise ImproperlyConfigured(msg.format(name=self.urlconf_name)) from e
+django.core.exceptions.ImproperlyConfigured: The included URLconf '<module 'hotel.urls' from '/home/runner/workspace/hotel/urls.py'>' does not appear to have any patterns in it. If you see the 'urlpatterns' variable with valid patterns in the file then the issue is probably caused by a circular import.
