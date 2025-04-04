@@ -1,0 +1,16 @@
+
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">{{ hotel.name }} - Gallery</h1>
+    
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {% for image in hotel.images.all %}
+        <div class="relative">
+            <img src="{{ image.image.url }}" alt="{{ hotel.name }}" class="w-full h-64 object-cover rounded-lg">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -13,9 +13,16 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for hotel in hotels %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            {% if hotel.images.first %}
-            <img src="{{ hotel.images.first.image.url }}" alt="{{ hotel.name }}" class="w-full h-48 object-cover">
-            {% endif %}
+            <div class="relative">
+                {% if hotel.images.first %}
+                <div class="relative w-full h-48">
+                    <img src="{{ hotel.images.first.image.url }}" alt="{{ hotel.name }}" class="w-full h-48 object-cover" id="hotelImage{{ hotel.id }}">
+                    <button onclick="prevImage({{ hotel.id }})" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full">&larr;</button>
+                    <button onclick="nextImage({{ hotel.id }})" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full">&rarr;</button>
+                </div>
+                <a href="{% url 'hotel:hotel_gallery' hotel.id %}" class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white px-3 py-1 rounded">Gallery</a>
+                {% endif %}
+            </div>
             <div class="p-4">
                 <h2 class="text-xl font-semibold mb-2">{{ hotel.name }}</h2>
                 <p class="text-gray-600 mb-2">{{ hotel.description|truncatewords:30 }}</p>
@@ -47,6 +54,30 @@
 </div>
 
 <script>
+const hotelImages = {};
+
+{% for hotel in hotels %}
+hotelImages[{{ hotel.id }}] = [
+    {% for image in hotel.images.all %}
+    "{{ image.image.url }}",
+    {% endfor %}
+];
+{% endfor %}
+
+let currentImageIndex = {};
+
+function nextImage(hotelId) {
+    if (!currentImageIndex[hotelId]) currentImageIndex[hotelId] = 0;
+    currentImageIndex[hotelId] = (currentImageIndex[hotelId] + 1) % hotelImages[hotelId].length;
+    document.getElementById(`hotelImage${hotelId}`).src = hotelImages[hotelId][currentImageIndex[hotelId]];
+}
+
+function prevImage(hotelId) {
+    if (!currentImageIndex[hotelId]) currentImageIndex[hotelId] = 0;
+    currentImageIndex[hotelId] = (currentImageIndex[hotelId] - 1 + hotelImages[hotelId].length) % hotelImages[hotelId].length;
+    document.getElementById(`hotelImage${hotelId}`).src = hotelImages[hotelId][currentImageIndex[hotelId]];
+}
+
 function toggleFavorite(hotelId) {
     fetch(`/hotels/${hotelId}/favorite/`, {
         method: 'POST',

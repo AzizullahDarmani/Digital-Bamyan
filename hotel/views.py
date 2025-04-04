@@ -60,6 +60,10 @@ def rate_hotel(request, hotel_id):
     return JsonResponse({'status': 'error'})
 
 @login_required
+def hotel_gallery(request, hotel_id):
+    hotel = get_object_or_404(Hotel, id=hotel_id)
+    return render(request, 'hotel/hotel_gallery.html', {'hotel': hotel})
+
 def toggle_favorite(request, hotel_id):
     hotel = get_object_or_404(Hotel, id=hotel_id)
     favorite, created = FavoriteHotel.objects.get_or_create(
