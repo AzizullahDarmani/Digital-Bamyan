@@ -16,7 +16,7 @@
             <div class="p-4">
                 <div class="flex justify-between items-start">
                     <h2 class="text-xl font-semibold">{{ hotel.name }}</h2>
-                    {% if user.is_authenticated %}
+                    {% if user.is_authenticated and not user.is_superuser %}
                     <button onclick="toggleFavorite({{ hotel.id }})" 
                             class="favorite-btn text-2xl"
                             data-hotel-id="{{ hotel.id }}">
