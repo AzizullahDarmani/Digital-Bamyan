@@ -92,3 +92,9 @@ def book_hotel(request, hotel_id):
         'form': form,
         'hotel': hotel
     })
+
+
+
+def hotel_gallery(request, hotel_id):
+    hotel = get_object_or_404(Hotel, id=hotel_id)
+    return render(request, 'hotel/hotel_gallery.html', {'hotel': hotel})
