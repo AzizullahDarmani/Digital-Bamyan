@@ -16,12 +16,12 @@ def hotel_list(request):
 @user_passes_test(is_superuser)
 def add_hotel(request):
     if request.method == 'POST':
-        form = HotelForm(request.POST)
+        hotel_form = HotelForm(request.POST)
         room_formset = RoomFormSet(request.POST, prefix='rooms')
         image_formset = HotelImageFormSet(request.POST, request.FILES, prefix='images')
 
-        if form.is_valid() and room_formset.is_valid() and image_formset.is_valid():
-            hotel = form.save()
+        if hotel_form.is_valid() and room_formset.is_valid() and image_formset.is_valid():
+            hotel = hotel_form.save()
             room_formset.instance = hotel
             room_formset.save()
             image_formset.instance = hotel
@@ -29,12 +29,12 @@ def add_hotel(request):
             messages.success(request, 'Hotel added successfully!')
             return redirect('hotel:hotel_list')
     else:
-        form = HotelForm()
+        hotel_form = HotelForm()
         room_formset = RoomFormSet(prefix='rooms')
         image_formset = HotelImageFormSet(prefix='images')
 
     return render(request, 'hotel/add_hotel.html', {
-        'form': form,
+        'hotel_form': hotel_form,
         'room_formset': room_formset,
         'image_formset': image_formset
     })
