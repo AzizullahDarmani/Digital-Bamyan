@@ -16,8 +16,8 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for hotel in hotels %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
-            {% if hotel.image %}
-            <img src="{{ hotel.image.url }}" alt="{{ hotel.name }}" class="w-full h-48 object-cover">
+            {% if hotel.images.all %}
+            <img src="{{ hotel.images.first.image.url }}" alt="{{ hotel.name }}" class="w-full h-48 object-cover">
             {% endif %}
             
             <div class="p-4">
@@ -37,8 +37,17 @@
                 </div>
                 
                 <p class="text-gray-600 mt-2">{{ hotel.description|truncatewords:30 }}</p>
-                <p class="text-gray-500 mt-2">{{ hotel.location }}</p>
-                <p class="text-gray-500">Price Range: {{ hotel.price_range }}</p>
+                <p class="text-gray-500 mt-2">{{ hotel.location_url }}</p>
+                
+                <div class="mt-4">
+                    <h3 class="font-semibold">Available Rooms:</h3>
+                    {% for room in hotel.rooms.all %}
+                    <div class="flex justify-between items-center mt-2">
+                        <span>{{ room.get_type_display }}</span>
+                        <span class="font-semibold">${{ room.price }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
                 
                 {% if hotel.avg_rating %}
                 <div class="mt-2">
