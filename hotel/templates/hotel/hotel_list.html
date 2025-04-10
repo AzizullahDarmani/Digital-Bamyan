@@ -239,21 +239,7 @@ document.getElementById('reviewForm').addEventListener('submit', function(e) {
 document.getElementById('bookingForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const hotelId = document.getElementById('bookingHotelId').value;
-    const formData = new FormData(this);
-
-    fetch(`/hotel/${hotelId}/book/`, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        }
-    });
+    window.location.href = `/hotel/${hotelId}/book/`;
 });
 </script>
 {% endblock %}
