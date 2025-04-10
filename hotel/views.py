@@ -95,6 +95,13 @@ def book_hotel(request, hotel_id):
 
 
 
+@user_passes_test(is_superuser)
+def delete_hotel(request, hotel_id):
+    hotel = get_object_or_404(Hotel, id=hotel_id)
+    hotel.delete()
+    messages.success(request, 'Hotel deleted successfully!')
+    return redirect('hotel:hotel_list')
+
 def hotel_gallery(request, hotel_id):
     hotel = get_object_or_404(Hotel, id=hotel_id)
     return render(request, 'hotel/hotel_gallery.html', {'hotel': hotel})

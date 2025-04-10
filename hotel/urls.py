@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:hotel_id>/favorite/', views.toggle_favorite, name='toggle_favorite'),
     path('<int:hotel_id>/rate/', views.rate_hotel, name='rate_hotel'),
     path('<int:hotel_id>/book/', views.book_hotel, name='book_hotel'),
+    path('<int:hotel_id>/delete/', views.delete_hotel, name='delete_hotel'),
 ]
