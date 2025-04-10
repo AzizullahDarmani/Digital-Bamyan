@@ -95,7 +95,10 @@ def book_hotel(request, hotel_id):
 
 @login_required
 def my_bookings(request):
-    bookings = HotelBooking.objects.filter(user=request.user).order_by('-created_at')
+    if request.user.is_superuser:
+        bookings = HotelBooking.objects.all().order_by('-created_at')
+    else:
+        bookings = HotelBooking.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'hotel/my_bookings.html', {'bookings': bookings})
 
 

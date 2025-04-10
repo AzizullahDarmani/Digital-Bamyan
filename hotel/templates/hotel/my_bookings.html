@@ -12,6 +12,9 @@
             <div class="flex justify-between items-start">
                 <div>
                     <h2 class="text-xl font-semibold">{{ booking.hotel.name }}</h2>
+                    {% if user.is_superuser %}
+                    <p class="text-gray-600">Booked by: {{ booking.user.username }}</p>
+                    {% endif %}
                     <p class="text-gray-600">Room Type: {{ booking.room.get_type_display }}</p>
                     <p class="text-gray-600">Check-in: {{ booking.check_in }}</p>
                     <p class="text-gray-600">Check-out: {{ booking.check_out }}</p>
