@@ -3,40 +3,91 @@
 {% load static %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8">Add New Hotel</h1>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">Add New Hotel</h1>
 
-    <form method="POST" enctype="multipart/form-data" class="max-w-2xl">
-        {% csrf_token %}
-        
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-4">Hotel Information</h2>
-            {{ hotel_form.as_p }}
-        </div>
-
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-4">Room Types</h2>
-            {{ room_formset.management_form }}
-            {% for form in room_formset %}
-            <div class="mb-4 p-4 border rounded">
-                {{ form.as_p }}
+        <form method="POST" enctype="multipart/form-data" class="space-y-8">
+            {% csrf_token %}
+            
+            <div class="bg-gray-50 rounded-lg p-6 space-y-6">
+                <h2 class="text-xl font-semibold text-gray-700 border-b pb-2">Basic Information</h2>
+                <div class="space-y-4">
+                    <div class="form-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Hotel Name</label>
+                        {{ hotel_form.name }}
+                    </div>
+                    <div class="form-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        {{ hotel_form.description }}
+                    </div>
+                    <div class="form-group">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Location URL (Google Maps)</label>
+                        {{ hotel_form.location_url }}
+                    </div>
+                </div>
             </div>
-            {% endfor %}
-        </div>
 
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 class="text-xl font-semibold mb-4">Hotel Images</h2>
-            {{ image_formset.management_form }}
-            {% for form in image_formset %}
-            <div class="mb-4">
-                {{ form.as_p }}
+            <div class="bg-gray-50 rounded-lg p-6 space-y-6">
+                <h2 class="text-xl font-semibold text-gray-700 border-b pb-2">Room Types</h2>
+                {{ room_formset.management_form }}
+                <div class="space-y-4" id="room-formset">
+                    {% for form in room_formset %}
+                    <div class="room-form bg-white p-4 rounded border">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Room Type</label>
+                                {{ form.type }}
+                            </div>
+                            <div class="form-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Price</label>
+                                {{ form.price }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            {% endfor %}
-        </div>
 
-        <button type="submit" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
-            Add Hotel
-        </button>
-    </form>
+            <div class="bg-gray-50 rounded-lg p-6 space-y-6">
+                <h2 class="text-xl font-semibold text-gray-700 border-b pb-2">Hotel Images</h2>
+                {{ image_formset.management_form }}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="image-formset">
+                    {% for form in image_formset %}
+                    <div class="image-form bg-white p-4 rounded border">
+                        <div class="form-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Image {{ forloop.counter }}</label>
+                            {{ form.image }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="flex justify-center mt-8">
+                <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold">
+                    Add Hotel
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<style>
+    input[type="text"], 
+    input[type="url"], 
+    input[type="number"],
+    textarea,
+    select {
+        @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+    }
+    
+    textarea {
+        @apply h-32;
+    }
+    
+    input[type="file"] {
+        @apply block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100;
+    }
+</style>
 {% endblock %}
