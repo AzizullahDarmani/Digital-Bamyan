@@ -7,10 +7,70 @@
     
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {% for image in hotel.images.all %}
-        <div class="relative">
-            <img src="{{ image.image.url }}" alt="{{ hotel.name }}" class="w-full h-64 object-cover rounded-lg">
+        <div class="relative cursor-pointer" onclick="openGallery({{ forloop.counter0 }})">
+            <img src="{{ image.image.url }}" alt="{{ hotel.name }}" class="w-full h-64 object-cover rounded-lg hover:opacity-90 transition-opacity">
         </div>
         {% endfor %}
     </div>
 </div>
+
+<!-- Image Gallery Modal -->
+<div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50 flex items-center justify-center">
+    <button onclick="closeGallery()" class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300">&times;</button>
+    
+    <button onclick="prevImage()" class="absolute left-4 text-white text-4xl hover:text-gray-300">&lt;</button>
+    
+    <div class="max-w-4xl max-h-[80vh] relative">
+        <img id="modalImage" src="" alt="" class="max-h-[80vh] w-auto mx-auto">
+    </div>
+    
+    <button onclick="nextImage()" class="absolute right-4 text-white text-4xl hover:text-gray-300">&gt;</button>
+</div>
+
+<script>
+let currentIndex = 0;
+const images = [
+    {% for image in hotel.images.all %}
+    "{{ image.image.url }}"{% if not forloop.last %},{% endif %}
+    {% endfor %}
+];
+
+function openGallery(index) {
+    currentIndex = index;
+    const modal = document.getElementById('galleryModal');
+    const modalImg = document.getElementById('modalImage');
+    modal.classList.remove('hidden');
+    modalImg.src = images[currentIndex];
+}
+
+function closeGallery() {
+    document.getElementById('galleryModal').classList.add('hidden');
+}
+
+function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    document.getElementById('modalImage').src = images[currentIndex];
+}
+
+function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    document.getElementById('modalImage').src = images[currentIndex];
+}
+
+// Close modal when clicking outside the image
+document.getElementById('galleryModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeGallery();
+    }
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+    if (document.getElementById('galleryModal').classList.contains('hidden')) return;
+    
+    if (e.key === 'Escape') closeGallery();
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'ArrowRight') nextImage();
+});
+</script>
 {% endblock %}
