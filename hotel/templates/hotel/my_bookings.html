@@ -1,0 +1,30 @@
+
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">My Bookings</h1>
+    
+    <div class="grid grid-cols-1 gap-6">
+        {% for booking in bookings %}
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h2 class="text-xl font-semibold">{{ booking.hotel.name }}</h2>
+                    <p class="text-gray-600">Room Type: {{ booking.room.get_type_display }}</p>
+                    <p class="text-gray-600">Check-in: {{ booking.check_in }}</p>
+                    <p class="text-gray-600">Check-out: {{ booking.check_out }}</p>
+                    <p class="text-gray-600">Booked on: {{ booking.created_at|date:"F d, Y" }}</p>
+                </div>
+                <a href="{% url 'hotel:hotel_list' %}" class="text-blue-500 hover:text-blue-700">View Hotel</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center text-gray-600">
+            <p>You haven't made any bookings yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

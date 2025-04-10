@@ -93,6 +93,11 @@ def book_hotel(request, hotel_id):
         'hotel': hotel
     })
 
+@login_required
+def my_bookings(request):
+    bookings = HotelBooking.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'hotel/my_bookings.html', {'bookings': bookings})
+
 
 
 @user_passes_test(is_superuser)
