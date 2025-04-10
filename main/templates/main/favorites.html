@@ -45,15 +45,15 @@
         <div class="mt-8">
             <h2 class="text-2xl font-semibold mb-4">Favorite Hotels</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {% for favorite in user.favoritehotel_set.all %}
+                {% for hotel in user.favorite_hotels.all %}
                 <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    {% if favorite.hotel.images.first %}
-                    <img src="{{ favorite.hotel.images.first.image.url }}" alt="{{ favorite.hotel.name }}" class="w-full h-48 object-cover">
+                    {% if hotel.images.first %}
+                    <img src="{{ hotel.images.first.image.url }}" alt="{{ hotel.name }}" class="w-full h-48 object-cover">
                     {% endif %}
                     <div class="p-4">
-                        <h3 class="text-xl font-semibold">{{ favorite.hotel.name }}</h3>
-                        <p class="text-gray-600">{{ favorite.hotel.description|truncatewords:20 }}</p>
-                        <button onclick="toggleFavorite({{ favorite.hotel.id }})" class="mt-2 text-red-500">
+                        <h3 class="text-xl font-semibold">{{ hotel.name }}</h3>
+                        <p class="text-gray-600">{{ hotel.description|truncatewords:20 }}</p>
+                        <button onclick="toggleFavorite({{ hotel.id }})" class="mt-2 text-red-500">
                             Remove from Favorites
                         </button>
                     </div>

@@ -166,6 +166,10 @@ function toggleFavorite(hotelId) {
     .then(data => {
         const btn = document.querySelector(`button[data-hotel-id="${hotelId}"]`);
         btn.innerHTML = data.is_favorite ? '⭐' : '☆';
+        // Refresh the page if we're on the favorites page
+        if (window.location.pathname === '/favorites/') {
+            window.location.reload();
+        }
     });
 }
 
