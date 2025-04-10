@@ -20,15 +20,15 @@
 
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {% for img in place.gallery.all %}
-        <div class="relative group">
-            <img src="{{ img.image.url }}" alt="{{ img.caption }}" class="w-full h-64 object-cover rounded-lg">
+        <div class="relative group cursor-pointer" onclick="openGallery({{ forloop.counter0 }})">
+            <img src="{{ img.image.url }}" alt="{{ img.caption }}" class="w-full h-64 object-cover rounded-lg hover:opacity-90 transition-opacity">
             {% if user.is_authenticated %}
             <div class="absolute top-2 right-2 flex flex-col gap-2">
-                <button onclick="toggleImageFavorite({{ img.id }})" class="bg-white rounded-full p-2">
+                <button onclick="event.stopPropagation(); toggleImageFavorite({{ img.id }})" class="bg-white rounded-full p-2">
                     <span id="favIcon{{ img.id }}" class="{% if img in user.favoriteimage_set.all %}text-yellow-500{% endif %}">★</span>
                 </button>
                 {% if user.is_superuser %}
-                <button onclick="deleteImage({{ img.id }})" class="bg-white rounded-full p-2">
+                <button onclick="event.stopPropagation(); deleteImage({{ img.id }})" class="bg-white rounded-full p-2">
                     <span class="text-red-500">✕</span>
                 </button>
                 {% endif %}
@@ -39,7 +39,60 @@
     </div>
 </div>
 
+<!-- Modal Gallery -->
+<div id="galleryModal" class="fixed inset-0 bg-black bg-opacity-90 hidden z-50 flex items-center justify-center">
+    <button onclick="closeGallery()" class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300">&times;</button>
+    <button onclick="prevImage()" class="absolute left-4 text-white text-4xl hover:text-gray-300">&lt;</button>
+    <button onclick="nextImage()" class="absolute right-4 text-white text-4xl hover:text-gray-300">&gt;</button>
+    <img id="modalImage" src="" alt="" class="max-h-[90vh] max-w-[90vw] object-contain">
+</div>
+
 <script>
+let currentIndex = 0;
+const images = [
+    {% for img in place.gallery.all %}
+    "{{ img.image.url }}"{% if not forloop.last %},{% endif %}
+    {% endfor %}
+];
+
+function openGallery(index) {
+    currentIndex = index;
+    const modal = document.getElementById('galleryModal');
+    const modalImg = document.getElementById('modalImage');
+    modal.classList.remove('hidden');
+    modalImg.src = images[currentIndex];
+}
+
+function closeGallery() {
+    document.getElementById('galleryModal').classList.add('hidden');
+}
+
+function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    document.getElementById('modalImage').src = images[currentIndex];
+}
+
+function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    document.getElementById('modalImage').src = images[currentIndex];
+}
+
+// Close modal when clicking outside the image
+document.getElementById('galleryModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeGallery();
+    }
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+    if (document.getElementById('galleryModal').classList.contains('hidden')) return;
+    
+    if (e.key === 'Escape') closeGallery();
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'ArrowRight') nextImage();
+});
+
 function toggleImageFavorite(imageId) {
     fetch(`/images/${imageId}/favorite/`, {
         method: 'POST',
