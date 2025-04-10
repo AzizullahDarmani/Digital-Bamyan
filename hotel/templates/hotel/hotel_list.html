@@ -35,7 +35,15 @@
                     {% endif %}
                 </div>
 
-                <p class="text-gray-600 mt-2">{{ hotel.description|truncatewords:30 }}</p>
+                <div class="text-gray-600 mt-2">
+                    <p class="description-{{ hotel.id }} {% if hotel.description|length > 200 %}line-clamp-3{% endif %}">{{ hotel.description }}</p>
+                    {% if hotel.description|length > 200 %}
+                    <button onclick="toggleDescription({{ hotel.id }})" class="text-blue-500 hover:text-blue-700 text-sm mt-1">
+                        <span class="see-more-{{ hotel.id }}">See more</span>
+                        <span class="see-less-{{ hotel.id }} hidden">See less</span>
+                    </button>
+                    {% endif %}
+                </div>
                 <div class="flex items-center space-x-4 mt-2">
                     <a href="{{ hotel.location_url }}" target="_blank" class="text-blue-500 hover:text-blue-700">
                         View on Map
@@ -155,6 +163,16 @@
 </div>
 
 <script>
+function toggleDescription(hotelId) {
+    const description = document.querySelector(`.description-${hotelId}`);
+    const seeMore = document.querySelector(`.see-more-${hotelId}`);
+    const seeLess = document.querySelector(`.see-less-${hotelId}`);
+    
+    description.classList.toggle('line-clamp-3');
+    seeMore.classList.toggle('hidden');
+    seeLess.classList.toggle('hidden');
+}
+
 function toggleFavorite(hotelId) {
     fetch(`/hotel/${hotelId}/favorite/`, {
         method: 'POST',
