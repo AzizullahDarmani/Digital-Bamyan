@@ -37,7 +37,25 @@
                 </div>
                 
                 <p class="text-gray-600 mt-2">{{ hotel.description|truncatewords:30 }}</p>
-                <p class="text-gray-500 mt-2">{{ hotel.location_url }}</p>
+                <div class="flex items-center space-x-4 mt-2">
+                    <a href="{{ hotel.location_url }}" target="_blank" class="text-blue-500 hover:text-blue-700">
+                        View on Map
+                    </a>
+                    <a href="{% url 'hotel:hotel_gallery' hotel.id %}" class="text-blue-500 hover:text-blue-700">
+                        View Gallery
+                    </a>
+                    {% if user.is_authenticated %}
+                    <button onclick="toggleFavorite({{ hotel.id }})" 
+                            class="favorite-btn text-2xl"
+                            data-hotel-id="{{ hotel.id }}">
+                        {% if user in hotel.favorites.all %}
+                        ⭐
+                        {% else %}
+                        ☆
+                        {% endif %}
+                    </button>
+                    {% endif %}
+                </div>
                 
                 <div class="mt-4">
                     <h3 class="font-semibold">Available Rooms:</h3>
