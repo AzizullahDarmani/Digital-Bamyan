@@ -141,7 +141,7 @@ def logout_view(request):
 
 def guides_list(request):
     guides = Guide.objects.all()
-    return render(request, 'main/guides.html', {'guides': guides})
+    return render(request, 'guides/guide_list.html', {'guides': guides})
 
 @login_required
 def place_gallery(request, place_id):
