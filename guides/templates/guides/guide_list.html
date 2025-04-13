@@ -1,110 +1,45 @@
-
 {% extends 'main/base.html' %}
 {% block content %}
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8">Our Guides</h1>
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">Tour Guides</h1>
+        {% if user.is_superuser %}
+        <a href="{% url 'guides:add_guide' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Add Tour Guide
+        </a>
+        {% endif %}
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for guide in guides %}
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-            <img src="{{ guide.photo.url }}" alt="{{ guide.user.get_full_name }}" class="w-full h-64 object-cover">
+            <img src="{{ guide.photo.url }}" alt="{{ guide.full_name }}" class="w-full h-64 object-cover">
             <div class="p-6">
-                <h2 class="text-xl font-semibold mb-2">{{ guide.user.get_full_name }}</h2>
-                <p class="text-gray-600 mb-4">{{ guide.bio }}</p>
-                <div class="flex items-center mb-4">
-                    <span class="text-yellow-500 mr-1">★</span>
-                    <span>{{ guide.rating|floatformat:1 }}</span>
+                <h2 class="text-xl font-semibold mb-2">{{ guide.full_name }}</h2>
+                <p class="text-gray-600 mb-4">{{ guide.description }}</p>
+
+                <div class="space-y-2 text-sm text-gray-600">
+                    <p><strong>Experience:</strong> {{ guide.experience_years }} years</p>
+                    <p><strong>Languages:</strong> {{ guide.get_languages_display }}</p>
+                    <p><strong>Contact:</strong> {{ guide.contact_number }}</p>
+                    <p><strong>Rate:</strong> ${{ guide.hourly_rate }}/hour</p>
                 </div>
-                <p class="text-gray-600">Contact: {{ guide.phone }}</p>
-                {% if user.is_authenticated and not user.is_superuser %}
-                <button onclick="showReviewModal({{ guide.id }})" 
-                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                    Write Review
-                </button>
+
+                {% if guide.reviews.exists %}
+                <div class="mt-4 border-t pt-4">
+                    <p class="text-sm text-gray-600">
+                        <span class="text-yellow-500">★</span>
+                        {{ guide.reviews.all|length }} reviews
+                    </p>
+                </div>
                 {% endif %}
             </div>
+        </div>
+        {% empty %}
+        <div class="col-span-3 text-center py-8 text-gray-500">
+            No tour guides available yet.
         </div>
         {% endfor %}
     </div>
 </div>
-
-<!-- Review Modal -->
-<div id="reviewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden">
-    <div class="bg-white p-8 rounded-lg max-w-md mx-auto mt-20">
-        <h2 class="text-2xl font-bold mb-4">Write a Review</h2>
-        <form id="reviewForm">
-            <div class="mb-4">
-                <label class="block text-gray-700 mb-2">Rating</label>
-                <select name="rating" class="w-full border rounded px-3 py-2">
-                    <option value="5">5 - Excellent</option>
-                    <option value="4">4 - Very Good</option>
-                    <option value="3">3 - Good</option>
-                    <option value="2">2 - Fair</option>
-                    <option value="1">1 - Poor</option>
-                </select>
-            </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 mb-2">Comment</label>
-                <textarea name="comment" class="w-full border rounded px-3 py-2" rows="4"></textarea>
-            </div>
-            <div class="flex justify-end">
-                <button type="button" onclick="closeReviewModal()" 
-                        class="bg-gray-500 text-white px-4 py-2 rounded mr-2">
-                    Cancel
-                </button>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
-                    Submit
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script>
-let currentGuideId = null;
-
-function showReviewModal(guideId) {
-    currentGuideId = guideId;
-    document.getElementById('reviewModal').classList.remove('hidden');
-}
-
-function closeReviewModal() {
-    document.getElementById('reviewModal').classList.add('hidden');
-    document.getElementById('reviewForm').reset();
-}
-
-document.getElementById('reviewForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    
-    fetch(`/guides/${currentGuideId}/rate/`, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken')
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            closeReviewModal();
-            location.reload();
-        }
-    });
-});
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-</script>
 {% endblock %}
