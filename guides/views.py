@@ -16,18 +16,26 @@ def guide_list(request):
 @user_passes_test(is_superuser)
 def add_guide(request):
     if request.method == 'POST':
-        guide = Guide(
-            full_name=request.POST['full_name'],
-            photo=request.FILES['photo'],
-            description=request.POST['description'],
-            experience_years=request.POST['experience_years'],
-            languages=request.POST.getlist('languages'),
-            contact_number=request.POST['contact_number'],
-            hourly_rate=request.POST['hourly_rate']
-        )
-        guide.save()
-        messages.success(request, 'Guide added successfully!')
-        return redirect('guides:guide_list')
+        try:
+            languages = request.POST.getlist('languages')
+            if not languages:
+                messages.error(request, 'Please select at least one language')
+                return render(request, 'guides/add_guide.html')
+            
+            guide = Guide.objects.create(
+                full_name=request.POST['full_name'],
+                photo=request.FILES.get('photo'),
+                description=request.POST['description'],
+                experience_years=int(request.POST['experience_years']),
+                languages=languages,
+                contact_number=request.POST['contact_number'],
+                hourly_rate=float(request.POST['hourly_rate'])
+            )
+            messages.success(request, 'Guide added successfully!')
+            return redirect('guides:guide_list')
+        except Exception as e:
+            messages.error(request, f'Error adding guide: {str(e)}')
+            return render(request, 'guides/add_guide.html')
     return render(request, 'guides/add_guide.html')
 
 @login_required
