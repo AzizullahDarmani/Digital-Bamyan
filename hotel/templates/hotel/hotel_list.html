@@ -105,7 +105,47 @@
 
                 <div class="mt-4">
                     <h3 class="font-semibold">Recent Reviews</h3>
-                    {% for review in hotel.reviews.all|slice:":3" %}
+                    <div class="reviews-container-{{ hotel.id }}">
+                        {% for review in hotel.reviews.all|slice:":3" %}
+                        <div class="mt-2 border-t pt-2 review-item">
+                            <p>{{ review.comment }}</p>
+                            <p class="text-sm text-gray-500">
+                                Rating: {{ review.rating }} ⭐ - {{ review.user.username }}
+                            </p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if hotel.reviews.all.count > 3 %}
+                    <button onclick="showAllReviews({{ hotel.id }})" class="text-blue-500 hover:text-blue-700 text-sm mt-2">
+                        See all reviews ({{ hotel.reviews.all.count }})
+                    </button>
+                    {% endif %}
+                </div>
+
+                {% if user.is_authenticated and not user.is_superuser %}
+                <div class="mt-4">
+                    <button onclick="showReviewModal({{ hotel.id }})" 
+                            class="bg-blue-500 text-white px-4 py-2 rounded mr-2">
+                        Write Review
+                    </button>
+                    <button onclick="showBookingModal({{ hotel.id }})" 
+                            class="bg-green-500 text-white px-4 py-2 rounded">
+                        Book Now
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Reviews Modal -->
+        <div id="allReviewsModal-{{ hotel.id }}" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg w-96 max-h-[80vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold">All Reviews for {{ hotel.name }}</h2>
+                    <button onclick="closeReviewsModal({{ hotel.id }})" class="text-gray-500 hover:text-gray-700">×</button>
+                </div>
+                <div class="all-reviews">
+                    {% for review in hotel.reviews.all %}
                     <div class="mt-2 border-t pt-2">
                         <p>{{ review.comment }}</p>
                         <p class="text-sm text-gray-500">
@@ -217,8 +257,18 @@ function closeModal(modalId) {
 
 function deleteHotel(hotelId){
     if(confirm("Are you sure you want to delete this hotel?")){
-        alert(`Hotel with ID ${hotelId} deleted. (This is a placeholder, backend functionality needed)`);
+        window.location.href = `/hotel/${hotelId}/delete/`;
     }
+}
+
+function showAllReviews(hotelId) {
+    const modal = document.getElementById(`allReviewsModal-${hotelId}`);
+    modal.classList.remove('hidden');
+}
+
+function closeReviewsModal(hotelId) {
+    const modal = document.getElementById(`allReviewsModal-${hotelId}`);
+    modal.classList.add('hidden');
 }
 
 document.getElementById('reviewForm').addEventListener('submit', function(e) {
