@@ -16,7 +16,7 @@ class Guide(models.Model):
     photo = models.ImageField(upload_to='guides/')
     description = models.TextField()
     experience_years = models.PositiveIntegerField()
-    languages = models.CharField(max_length=100, choices=LANGUAGE_CHOICES, default='EN')
+    languages = models.JSONField(default=list)  # Store multiple languages as a list
     contact_number = models.CharField(max_length=20)
     hourly_rate = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     created_at = models.DateTimeField(auto_now_add=True)

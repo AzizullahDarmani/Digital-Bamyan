@@ -21,7 +21,7 @@ def add_guide(request):
             photo=request.FILES['photo'],
             description=request.POST['description'],
             experience_years=request.POST['experience_years'],
-            languages=request.POST['languages'],
+            languages=request.POST.getlist('languages'),
             contact_number=request.POST['contact_number'],
             hourly_rate=request.POST['hourly_rate']
         )
