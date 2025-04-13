@@ -1,0 +1,47 @@
+TemplateSyntaxError at /guides/
+Invalid block tag on line 46: 'else', expected 'endblock'. Did you forget to register or load this tag?
+Request Method:	GET
+Request URL:	http://b8456eee-18fb-4101-a21b-ec820ddbdbe9-00-2vkjrwd4o50vd.pike.replit.dev/guides/
+Django Version:	5.0.2
+Exception Type:	TemplateSyntaxError
+Exception Value:	
+Invalid block tag on line 46: 'else', expected 'endblock'. Did you forget to register or load this tag?
+Exception Location:	/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages/django/template/base.py, line 555, in invalid_block_tag
+Raised during:	main.views.guides_list
+Python Executable:	/home/runner/workspace/.pythonlibs/bin/python
+Python Version:	3.10.16
+Python Path:	
+['/home/runner/workspace',
+ '/nix/store/lc7qv2ldzrs1aq3hbyzmbgvn0h2w26pl-sitecustomize/lib/python/site-packages',
+ '/nix/store/izqbpf8fkd2741sqwdca4a9kfy3ss2dx-python3.10-pip-24.0/lib/python3.10/site-packages',
+ '/nix/store/qlb1pg370bb647nj4dhc81y2jszvciz7-python3-3.10.16/lib/python310.zip',
+ '/nix/store/qlb1pg370bb647nj4dhc81y2jszvciz7-python3-3.10.16/lib/python3.10',
+ '/nix/store/qlb1pg370bb647nj4dhc81y2jszvciz7-python3-3.10.16/lib/python3.10/lib-dynload',
+ '/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages',
+ '/nix/store/qlb1pg370bb647nj4dhc81y2jszvciz7-python3-3.10.16/lib/python3.10/site-packages',
+ '/home/runner/workspace/.pythonlibs/lib/python3.10/site-packages',
+ '/nix/store/9ym4wlfl13w339g1jqpgp9llwrqml3jx-python3.10-setuptools-75.1.1/lib/python3.10/site-packages']
+Server time:	Sun, 13 Apr 2025 20:31:44 +0000
+Error during template rendering
+In template /home/runner/workspace/guides/templates/guides/guide_list.html, error at line 46
+
+Invalid block tag on line 46: 'else', expected 'endblock'. Did you forget to register or load this tag?
+36	                    <div class="mt-4 border-t pt-4">
+37	                        <p class="text-sm text-gray-600">
+38	                            <span class="text-yellow-500">★</span>
+39	                            {{ guide.avg_rating|floatformat:1 }} rating
+40	                        </p>
+41	                    </div>
+42	                    {% endif %}
+43	                </div>
+44	            </div>
+45	            {% endfor %}
+46	        {% else %}
+47	            <div class="col-span-3 text-center py-8 text-gray-500">
+48	                No tour guides available yet.
+49	            </div>
+50	        {% endif %}
+51	    </div>
+52	</div>
+53	{% endblock %}
+54

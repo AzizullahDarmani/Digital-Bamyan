@@ -12,11 +12,14 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% if guides %}
-            {% for guide in guides %}
+        {% for guide in guides %}
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                 {% if guide.photo %}
-                <img src="{{ guide.photo.url }}" alt="{{ guide.full_name }}" class="w-full h-64 object-cover">
+                    <img src="{{ guide.photo.url }}" alt="{{ guide.full_name }}" class="w-full h-64 object-cover">
+                {% else %}
+                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                        <span class="text-gray-500">No photo available</span>
+                    </div>
                 {% endif %}
                 <div class="p-6">
                     <h2 class="text-xl font-semibold mb-2">{{ guide.full_name }}</h2>

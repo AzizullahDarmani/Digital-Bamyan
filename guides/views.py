@@ -10,16 +10,17 @@ def is_superuser(user):
     return user.is_superuser
 
 def guide_list(request):
-    try:
-        guides = Guide.objects.all().order_by('-created_at')
-        for guide in guides:
+    guides = Guide.objects.all().order_by('-created_at')
+    print(f"Found {guides.count()} guides")  # Debug print
+    for guide in guides:
+        print(f"Guide: {guide.full_name}, Photo: {guide.photo.url if guide.photo else 'No photo'}")
+        try:
             avg_rating = guide.reviews.aggregate(Avg('rating'))['rating__avg']
             guide.avg_rating = avg_rating if avg_rating else 0
-        print(f"Found {guides.count()} guides")  # Debug print
-        return render(request, 'guides/guide_list.html', {'guides': guides})
-    except Exception as e:
-        print(f"Error in guide_list view: {str(e)}")  # Debug print
-        return render(request, 'guides/guide_list.html', {'guides': []})
+        except Exception as e:
+            guide.avg_rating = 0
+            print(f"Error calculating rating for guide {guide.full_name}: {str(e)}")
+    return render(request, 'guides/guide_list.html', {'guides': guides})
 
 @user_passes_test(is_superuser)
 def add_guide(request):
