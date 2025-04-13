@@ -1,3 +1,4 @@
+
 {% extends 'main/base.html' %}
 {% block content %}
 <div class="container mx-auto px-4 py-8">
@@ -13,7 +14,9 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for guide in guides %}
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            {% if guide.photo %}
             <img src="{{ guide.photo.url }}" alt="{{ guide.full_name }}" class="w-full h-64 object-cover">
+            {% endif %}
             <div class="p-6">
                 <h2 class="text-xl font-semibold mb-2">{{ guide.full_name }}</h2>
                 <p class="text-gray-600 mb-4">{{ guide.description }}</p>
@@ -25,11 +28,11 @@
                     <p><strong>Rate:</strong> ${{ guide.hourly_rate }}/hour</p>
                 </div>
 
-                {% if guide.reviews.exists %}
+                {% if guide.avg_rating %}
                 <div class="mt-4 border-t pt-4">
                     <p class="text-sm text-gray-600">
                         <span class="text-yellow-500">★</span>
-                        {{ guide.reviews.all|length }} reviews
+                        {{ guide.avg_rating|floatformat:1 }} rating
                     </p>
                 </div>
                 {% endif %}

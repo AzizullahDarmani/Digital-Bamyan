@@ -10,7 +10,10 @@ def is_superuser(user):
     return user.is_superuser
 
 def guide_list(request):
-    guides = Guide.objects.all().annotate(avg_rating=Avg('reviews__rating'))
+    guides = Guide.objects.all().order_by('-created_at')
+    for guide in guides:
+        avg_rating = guide.reviews.aggregate(Avg('rating'))['rating__avg']
+        guide.avg_rating = avg_rating if avg_rating else 0
     return render(request, 'guides/guide_list.html', {'guides': guides})
 
 @user_passes_test(is_superuser)
