@@ -113,11 +113,6 @@
                         </p>
                     </div>
                     {% endfor %}
-                    {% if hotel.reviews.all.count > 3 %}
-                    <button onclick="showAllReviews({{ hotel.id }})" class="text-blue-500 hover:text-blue-700 text-sm mt-2">
-                        See all reviews
-                    </button>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -251,36 +246,5 @@ document.getElementById('bookingForm').addEventListener('submit', function(e) {
     const hotelId = document.getElementById('bookingHotelId').value;
     window.location.href = `/hotel/${hotelId}/book/`;
 });
-<!-- All Reviews Modal -->
-<div id="reviewsModal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg w-96 max-h-[80vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold">All Reviews</h2>
-            <button onclick="closeModal('reviewsModal')" class="text-gray-500 hover:text-gray-700">
-                ✕
-            </button>
-        </div>
-        <div id="allReviews"></div>
-    </div>
-</div>
-
-<script>
-function showAllReviews(hotelId) {
-    const modal = document.getElementById('reviewsModal');
-    const reviewsContainer = document.getElementById('allReviews');
-    
-    // Clear previous reviews
-    reviewsContainer.innerHTML = '';
-    
-    // Get all reviews for this hotel
-    const reviews = Array.from(document.querySelectorAll(`[data-hotel-id="${hotelId}"] .reviews-container .review-item`));
-    
-    // Add all reviews to modal
-    reviews.forEach(review => {
-        reviewsContainer.appendChild(review.cloneNode(true));
-    });
-    
-    modal.classList.remove('hidden');
-}
 </script>
 {% endblock %}
