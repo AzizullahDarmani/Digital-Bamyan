@@ -42,12 +42,11 @@
                     {% endif %}
                 </div>
             </div>
-            {% endfor %}
-        {% else %}
+            {% empty %}
             <div class="col-span-3 text-center py-8 text-gray-500">
                 No tour guides available yet.
             </div>
-        {% endif %}
+            {% endfor %}
     </div>
 </div>
 {% endblock %}
