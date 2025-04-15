@@ -43,12 +43,4 @@ class Hotel(models.Model):
     def __str__(self):
         return self.name
 
-class Guide(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=20)
-    bio = models.TextField()
-    photo = models.ImageField(upload_to='guides/')
-    rating = models.FloatField(default=0.0)
-    
-    def __str__(self):
-        return self.user.get_full_name()
+# Guide model moved to guides/models.py

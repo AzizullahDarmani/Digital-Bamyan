@@ -39,7 +39,7 @@ def add_guide(request):
             languages = request.POST.getlist('languages')
             if not languages:
                 messages.error(request, 'Please select at least one language')
-                return render(request, 'guides/add_guide.html')
+                return render(request, 'guides/add_guide.html', {'guide': Guide})
             
             guide = Guide.objects.create(
                 full_name=request.POST['full_name'],
