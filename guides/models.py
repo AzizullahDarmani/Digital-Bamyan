@@ -13,7 +13,7 @@ class Guide(models.Model):
     ]
     
     full_name = models.CharField(max_length=200)
-    photo = models.ImageField(upload_to='guides/')
+    photo = models.ImageField(upload_to='guides/guide_photos/')
     description = models.TextField()
     experience_years = models.PositiveIntegerField()
     languages = models.JSONField(default=list)  # Store multiple languages as a list
