@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
@@ -11,16 +10,19 @@ class Guide(models.Model):
         ('AR', 'Arabic'),
         ('UR', 'Urdu'),
     ]
-    
+
     full_name = models.CharField(max_length=200)
-    photo = models.ImageField(upload_to='guides/guide_photos/')
+    photo = models.ImageField(
+        upload_to='guides/guide_photos/',
+        default='guides/guide_photos/default.jpg'  # default image for existing records
+    )
     description = models.TextField()
     experience_years = models.PositiveIntegerField()
-    languages = models.JSONField(default=list)  # Store multiple languages as a list
+    languages = models.JSONField(default=list)
     contact_number = models.CharField(max_length=20)
     hourly_rate = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     created_at = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
         return self.full_name
 
