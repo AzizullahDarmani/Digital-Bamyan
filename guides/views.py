@@ -44,8 +44,8 @@ def add_guide(request):
             return redirect('guides:guide_list')
         except Exception as e:
             messages.error(request, f'Error adding guide: {str(e)}')
-            return render(request, 'guides/add_guide.html')
-    return render(request, 'guides/add_guide.html')
+            return render(request, 'guides/add_guide.html', {'guide': Guide})
+    return render(request, 'guides/add_guide.html', {'guide': Guide})
 
 @login_required
 def rate_guide(request, guide_id):
