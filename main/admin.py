@@ -14,5 +14,4 @@ class PlaceAdmin(admin.ModelAdmin):
 
 admin.site.register(PlaceImage)
 admin.site.register(Hotel)
-admin.site.register(Guide)
 admin.site.register(FavoriteImage)
