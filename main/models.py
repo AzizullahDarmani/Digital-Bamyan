@@ -42,5 +42,3 @@ class Hotel(models.Model):
     
     def __str__(self):
         return self.name
-
-# Guide model moved to guides/models.py
