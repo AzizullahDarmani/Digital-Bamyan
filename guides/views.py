@@ -54,6 +54,33 @@ def delete_guide(request, guide_id):
     messages.success(request, 'Guide deleted successfully!')
     return redirect('guides:guide_list')
 
+@user_passes_test(is_superuser)
+def edit_guide(request, guide_id):
+    guide = get_object_or_404(Guide, id=guide_id)
+    if request.method == 'POST':
+        try:
+            languages = request.POST.getlist('languages')
+            if not languages:
+                messages.error(request, 'Please select at least one language')
+                return render(request, 'guides/edit_guide.html', {'guide': guide})
+            
+            guide.full_name = request.POST['full_name']
+            if 'photo' in request.FILES:
+                guide.photo = request.FILES['photo']
+            guide.description = request.POST['description']
+            guide.experience_years = int(request.POST['experience_years'])
+            guide.languages = languages
+            guide.contact_number = request.POST['contact_number']
+            guide.hourly_rate = float(request.POST['hourly_rate'])
+            guide.save()
+            
+            messages.success(request, 'Guide updated successfully!')
+            return redirect('guides:guide_list')
+        except Exception as e:
+            messages.error(request, f'Error updating guide: {str(e)}')
+            return render(request, 'guides/edit_guide.html', {'guide': guide})
+    return render(request, 'guides/edit_guide.html', {'guide': guide})
+
 @login_required
 def rate_guide(request, guide_id):
     guide = get_object_or_404(Guide, id=guide_id)
