@@ -10,17 +10,27 @@ def is_superuser(user):
     return user.is_superuser
 
 def guide_list(request):
-    guides = Guide.objects.all().order_by('-created_at')
-    print(f"Found {guides.count()} guides")  # Debug print
-    for guide in guides:
-        print(f"Guide: {guide.full_name}, Photo: {guide.photo.url if guide.photo else 'No photo'}")
-        try:
-            avg_rating = guide.reviews.aggregate(Avg('rating'))['rating__avg']
-            guide.avg_rating = avg_rating if avg_rating else 0
-        except Exception as e:
-            guide.avg_rating = 0
-            print(f"Error calculating rating for guide {guide.full_name}: {str(e)}")
-    return render(request, 'guides/guide_list.html', {'guides': guides})
+    try:
+        guides = Guide.objects.filter(is_active=True).order_by('-created_at')
+        print(f"Found {guides.count()} guides")  # Debug print
+        
+        for guide in guides:
+            print(f"Guide: {guide.full_name}")
+            try:
+                avg_rating = guide.reviews.aggregate(Avg('rating'))['rating__avg']
+                guide.avg_rating = avg_rating if avg_rating else 0
+            except Exception as e:
+                guide.avg_rating = 0
+                print(f"Error calculating rating for guide {guide.full_name}: {str(e)}")
+        
+        context = {
+            'guides': guides,
+            'guide_count': guides.count()
+        }
+        return render(request, 'guides/guide_list.html', context)
+    except Exception as e:
+        print(f"Error in guide_list view: {str(e)}")
+        return render(request, 'guides/guide_list.html', {'guides': [], 'error': str(e)})
 
 @user_passes_test(is_superuser)
 def add_guide(request):

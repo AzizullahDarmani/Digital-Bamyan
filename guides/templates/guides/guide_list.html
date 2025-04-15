@@ -11,6 +11,12 @@
         {% endif %}
     </div>
 
+    {% if error %}
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        Error: {{ error }}
+    </div>
+    {% endif %}
+    
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for guide in guides %}
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
