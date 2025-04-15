@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -71,12 +70,12 @@ def edit_place(request, place_id):
         if 'image' in request.FILES:
             place.image = request.FILES['image']
         place.save()
-        
+
         if 'gallery' in request.FILES:
             for img in request.FILES.getlist('gallery'):
                 place_image = PlaceImage.objects.create(image=img)
                 place.gallery.add(place_image)
-                
+
         return redirect('main:places')
     return render(request, 'main/edit_place.html', {'place': place})
 
@@ -189,3 +188,6 @@ def delete_image(request, image_id):
         image.delete()
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error'}, status=400)
+
+def about(request):
+    return render(request, 'main/about.html')

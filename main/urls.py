@@ -23,4 +23,5 @@ urlpatterns = [
     path('images/<int:image_id>/favorite/', views.toggle_favorite_image, name='toggle_favorite_image'),
     path('places/gallery/images/<int:image_id>/delete/', views.delete_image, name='delete_image'),
     path('favorites/', views.favorites, name='favorites'),
+    path('about/', views.about, name='about'),
 ]
