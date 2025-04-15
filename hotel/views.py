@@ -101,6 +101,13 @@ def my_bookings(request):
         bookings = HotelBooking.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'hotel/my_bookings.html', {'bookings': bookings})
 
+@user_passes_test(is_superuser)
+def delete_booking(request, booking_id):
+    booking = get_object_or_404(HotelBooking, id=booking_id)
+    booking.delete()
+    messages.success(request, 'Booking deleted successfully!')
+    return redirect('hotel:my_bookings')
+
 
 
 @user_passes_test(is_superuser)
