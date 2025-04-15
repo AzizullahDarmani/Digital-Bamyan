@@ -20,23 +20,40 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for guide in guides %}
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                {% if guide.photo %}
-                    <img src="{{ guide.photo.url }}" alt="{{ guide.full_name }}" class="w-full h-64 object-cover">
-                {% else %}
-                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
-                        <span class="text-gray-500">No photo available</span>
-                    </div>
-                {% endif %}
+                <div class="flex justify-center py-4">
+                    {% if guide.photo %}
+                        <img src="{{ guide.photo.url }}" alt="{{ guide.full_name }}" class="w-48 h-48 object-cover rounded-full border-4 border-blue-500">
+                    {% else %}
+                        <div class="w-48 h-48 bg-gray-200 rounded-full flex items-center justify-center border-4 border-blue-500">
+                            <span class="text-gray-500">No photo</span>
+                        </div>
+                    {% endif %}
+                </div>
                 <div class="p-6">
                     <h2 class="text-xl font-semibold mb-2">{{ guide.full_name }}</h2>
                     <p class="text-gray-600 mb-4">{{ guide.description }}</p>
 
                     <div class="space-y-2 text-sm text-gray-600">
                         <p><strong>Experience:</strong> {{ guide.experience_years }} years</p>
-                        <p><strong>Languages:</strong> {{ guide.languages|join:", " }}</p>
+                        <p><strong>Languages:</strong> 
+                            {% for lang in guide.languages %}
+                                {% for code, name in guide.LANGUAGE_CHOICES %}
+                                    {% if code == lang %}{{ name }}{% if not forloop.parentloop.last %}, {% endif %}{% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        </p>
                         <p><strong>Contact:</strong> {{ guide.contact_number }}</p>
                         <p><strong>Rate:</strong> ${{ guide.hourly_rate }}/hour</p>
                     </div>
+
+                    {% if user.is_superuser %}
+                    <div class="mt-4 border-t pt-4">
+                        <a href="{% url 'guides:delete_guide' guide.id %}" onclick="return confirm('Are you sure you want to delete this guide?')" 
+                           class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                            Delete Guide
+                        </a>
+                    </div>
+                    {% endif %}
 
                     {% if guide.avg_rating %}
                     <div class="mt-4 border-t pt-4">

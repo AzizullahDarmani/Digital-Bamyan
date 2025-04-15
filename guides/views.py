@@ -47,6 +47,13 @@ def add_guide(request):
             return render(request, 'guides/add_guide.html', {'guide': Guide})
     return render(request, 'guides/add_guide.html', {'guide': Guide})
 
+@user_passes_test(is_superuser)
+def delete_guide(request, guide_id):
+    guide = get_object_or_404(Guide, id=guide_id)
+    guide.delete()
+    messages.success(request, 'Guide deleted successfully!')
+    return redirect('guides:guide_list')
+
 @login_required
 def rate_guide(request, guide_id):
     guide = get_object_or_404(Guide, id=guide_id)
