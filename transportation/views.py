@@ -20,16 +20,23 @@ def add_transportation(request):
         capacity = request.POST.get('capacity')
         price_per_day = request.POST.get('price_per_day')
         description = request.POST.get('description')
-        image = request.FILES.get('image')
+        images = request.FILES.getlist('images')
         
-        Transportation.objects.create(
+        vehicle = Transportation.objects.create(
             name=name,
             vehicle_type=vehicle_type,
             capacity=capacity,
             price_per_day=price_per_day,
             description=description,
-            image=image
+            image=images[0] if images else None
         )
+
+        # Create TransportationImage objects for additional images
+        for image in images[1:]:
+            TransportationImage.objects.create(
+                vehicle=vehicle,
+                image=image
+            )
         messages.success(request, 'Vehicle added successfully!')
         return redirect('transportation:transportation_list')
         
