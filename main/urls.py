@@ -16,6 +16,9 @@ urlpatterns = [
     path('places/<int:place_id>/delete/', views.delete_place, name='delete_place'),
     path('places/<int:place_id>/like/', views.toggle_like, name='toggle_like'),
     path('places/<int:place_id>/favorite/', views.toggle_favorite, name='toggle_favorite'),
+
+    path('analytics/', views.analytics, name='analytics'),
+
     path('hotels/', views.hotels_list, name='hotels'),
     path('guides/', views.guides_list, name='guides'),
     path('places/<int:place_id>/gallery/', views.place_gallery, name='place_gallery'),

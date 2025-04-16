@@ -191,3 +191,34 @@ def delete_image(request, image_id):
 
 def about(request):
     return render(request, 'main/about.html')
+from django.contrib.auth.models import User
+from django.db.models import Count
+from django.db.models.functions import TruncDate
+from django.utils import timezone
+from datetime import timedelta
+import json
+
+@user_passes_test(is_superuser)
+def analytics(request):
+    # Get all users ordered by join date
+    users = User.objects.all().order_by('-date_joined')
+    
+    # Get visits for the last 30 days
+    thirty_days_ago = timezone.now() - timedelta(days=30)
+    visits = PageVisit.objects.filter(
+        timestamp__gte=thirty_days_ago
+    ).annotate(
+        date=TruncDate('timestamp')
+    ).values('date').annotate(
+        count=Count('id')
+    ).order_by('date')
+    
+    # Prepare data for the chart
+    dates = [visit['date'].strftime('%Y-%m-%d') for visit in visits]
+    visit_counts = [visit['count'] for visit in visits]
+    
+    return render(request, 'main/analytics.html', {
+        'users': users,
+        'dates': json.dumps(dates),
+        'visits': json.dumps(visit_counts)
+    })

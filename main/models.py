@@ -32,6 +32,17 @@ class FavoriteImage(models.Model):
     class Meta:
         unique_together = ('user', 'image')
 
+
+
+class PageVisit(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    path = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    ip_address = models.GenericIPAddressField()
+
+    class Meta:
+        ordering = ['-timestamp']
+
 class Hotel(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
