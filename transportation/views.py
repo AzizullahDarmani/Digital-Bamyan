@@ -94,3 +94,15 @@ def delete_vehicle(request, vehicle_id):
     vehicle.delete()
     messages.success(request, 'Vehicle deleted successfully!')
     return redirect('transportation:transportation_list')
+
+@login_required
+def delete_rental(request, rental_id):
+    rental = get_object_or_404(TransportationRental, id=rental_id)
+    if request.user.is_superuser or rental.user == request.user:
+        rental.vehicle.available = True
+        rental.vehicle.save()
+        rental.delete()
+        messages.success(request, 'Rental deleted successfully!')
+    else:
+        messages.error(request, 'You do not have permission to delete this rental!')
+    return redirect('transportation:my_rentals')

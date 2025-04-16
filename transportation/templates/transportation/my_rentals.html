@@ -17,6 +17,13 @@
                     <p class="text-gray-600">From: {{ rental.rental_date }}</p>
                     <p class="text-gray-600">To: {{ rental.return_date }}</p>
                     <p class="text-gray-600">Total Cost: ${{ rental.total_cost }}</p>
+                    {% if user.is_superuser or user == rental.user %}
+                    <a href="{% url 'transportation:delete_rental' rental.id %}" 
+                       onclick="return confirm('Are you sure you want to delete this rental?')"
+                       class="inline-block mt-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                        Delete Rental
+                    </a>
+                    {% endif %}
                 </div>
                 {% if rental.vehicle.image %}
                 <img src="{{ rental.vehicle.image.url }}" alt="{{ rental.vehicle.name }}" class="w-32 h-32 object-cover rounded">

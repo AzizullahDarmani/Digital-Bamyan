@@ -11,4 +11,5 @@ urlpatterns = [
     path('my-rentals/', views.my_rentals, name='my_rentals'),
     path('edit/<int:vehicle_id>/', views.edit_vehicle, name='edit_vehicle'),
     path('delete/<int:vehicle_id>/', views.delete_vehicle, name='delete_vehicle'),
+    path('rental/delete/<int:rental_id>/', views.delete_rental, name='delete_rental'),
 ]
