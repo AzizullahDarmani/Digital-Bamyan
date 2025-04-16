@@ -7,12 +7,14 @@
 <div class="container mx-auto px-4">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">Available Vehicles</h1>
-        {% if user.is_superuser %}
         <div class="flex gap-2">
-            <a href="{% url 'transportation:my_rentals' %}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">View All Rentals</a>
-            <a href="{% url 'transportation:add_transportation' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Vehicle</a>
+            {% if user.is_superuser %}
+                <a href="{% url 'transportation:my_rentals' %}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">View All Rentals</a>
+                <a href="{% url 'transportation:add_transportation' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Vehicle</a>
+            {% else %}
+                <a href="{% url 'transportation:my_rentals' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">My Rentals</a>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
