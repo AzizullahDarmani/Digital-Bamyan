@@ -8,7 +8,10 @@
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">Available Vehicles</h1>
         {% if user.is_superuser %}
-        <a href="{% url 'transportation:add_transportation' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Vehicle</a>
+        <div class="flex gap-2">
+            <a href="{% url 'transportation:my_rentals' %}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">View All Rentals</a>
+            <a href="{% url 'transportation:add_transportation' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Vehicle</a>
+        </div>
         {% endif %}
     </div>
 
@@ -25,7 +28,7 @@
                 <p class="text-gray-600 mb-2">Price per day: ${{ vehicle.price_per_day }}</p>
                 <p class="text-gray-700">{{ vehicle.description }}</p>
                 <div class="mt-4 flex gap-2">
-                    {% if vehicle.available %}
+                    {% if vehicle.available and not user.is_superuser %}
                     <a href="{% url 'transportation:rent_vehicle' vehicle.id %}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Rent</a>
                     {% endif %}
                     {% if user.is_superuser %}
