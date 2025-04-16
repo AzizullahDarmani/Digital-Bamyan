@@ -200,8 +200,8 @@ import json
 
 @user_passes_test(is_superuser)
 def analytics(request):
-    # Get all users ordered by join date
-    users = User.objects.all().order_by('-date_joined')
+    # Get all users ordered by join date, excluding superusers
+    users = User.objects.filter(is_superuser=False).order_by('-date_joined')
     
     # Get visits for the last 30 days
     thirty_days_ago = timezone.now() - timedelta(days=30)
@@ -222,3 +222,12 @@ def analytics(request):
         'dates': json.dumps(dates),
         'visits': json.dumps(visit_counts)
     })
+
+@user_passes_test(is_superuser)
+def delete_user(request, user_id):
+    if request.method == 'POST':
+        user = get_object_or_404(User, id=user_id)
+        if not user.is_superuser:  # Prevent deleting superusers
+            user.delete()
+        return redirect('main:analytics')
+    return redirect('main:analytics')
