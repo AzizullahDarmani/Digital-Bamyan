@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from .models import Place, Hotel, PlaceImage, FavoriteImage
+from .models import Place, Hotel, PlaceImage, FavoriteImage, PageVisit
 from guides.models import Guide
 
 def home(request):
