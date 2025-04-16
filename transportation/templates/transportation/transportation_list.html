@@ -24,6 +24,15 @@
                 <p class="text-gray-600 mb-2">Capacity: {{ vehicle.capacity }} persons</p>
                 <p class="text-gray-600 mb-2">Price per day: ${{ vehicle.price_per_day }}</p>
                 <p class="text-gray-700">{{ vehicle.description }}</p>
+                <div class="mt-4 flex gap-2">
+                    {% if vehicle.available %}
+                    <a href="{% url 'transportation:rent_vehicle' vehicle.id %}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Rent</a>
+                    {% endif %}
+                    {% if user.is_superuser %}
+                    <a href="{% url 'transportation:edit_vehicle' vehicle.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
+                    <a href="{% url 'transportation:delete_vehicle' vehicle.id %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onclick="return confirm('Are you sure you want to delete this vehicle?')">Delete</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
         {% empty %}

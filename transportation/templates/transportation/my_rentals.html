@@ -1,0 +1,31 @@
+
+{% extends 'main/base.html' %}
+
+{% block title %}My Rentals{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4">
+    <h1 class="text-3xl font-bold mb-6">{% if user.is_superuser %}All Rentals{% else %}My Rentals{% endif %}</h1>
+
+    <div class="grid grid-cols-1 gap-6">
+        {% for rental in rentals %}
+        <div class="bg-white rounded-lg shadow-md p-4">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h2 class="text-xl font-semibold">{{ rental.vehicle.name }}</h2>
+                    <p class="text-gray-600">Rented by: {{ rental.user.username }}</p>
+                    <p class="text-gray-600">From: {{ rental.rental_date }}</p>
+                    <p class="text-gray-600">To: {{ rental.return_date }}</p>
+                    <p class="text-gray-600">Total Cost: ${{ rental.total_cost }}</p>
+                </div>
+                {% if rental.vehicle.image %}
+                <img src="{{ rental.vehicle.image.url }}" alt="{{ rental.vehicle.name }}" class="w-32 h-32 object-cover rounded">
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-gray-600">No rentals found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
