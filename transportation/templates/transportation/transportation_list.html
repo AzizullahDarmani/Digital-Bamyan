@@ -21,10 +21,10 @@
         <div class="bg-white rounded-lg shadow-md overflow-hidden relative vehicle-gallery">
             <div class="relative">
                 {% for image in vehicle.images.all %}
-                    <img src="{{ image.image.url }}" alt="{{ vehicle.name }}" class="w-full h-48 object-cover {% if not forloop.first %}hidden{% endif %} main-image">
+                    <img src="{{ image.image.url }}" alt="{{ vehicle.name }}" class="w-full h-48 object-cover {% if not forloop.first %}hidden{% endif %} main-image cursor-pointer">
                 {% endfor %}
             </div>
-            
+
             <div class="p-4">
                 <h2 class="text-xl font-semibold mb-2">{{ vehicle.name }}</h2>
                 <p class="text-gray-600 mb-2">Type: {{ vehicle.get_vehicle_type_display }}</p>
@@ -73,37 +73,16 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentImageIndex = 0;
 
     galleries.forEach(gallery => {
-        const mainImage = gallery.querySelector('.main-image');
         const images = gallery.querySelectorAll('img');
-        const prevBtn = gallery.querySelector('.prev-image');
-        const nextBtn = gallery.querySelector('.next-image');
-        let currentIndex = 0;
-
-        if (prevBtn && nextBtn) {
-            prevBtn.addEventListener('click', (e) => {
+        images.forEach(img => {
+            img.addEventListener('click', (e) => {
                 e.stopPropagation();
-                currentIndex = (currentIndex - 1 + images.length) % images.length;
-                updateGalleryView();
+                currentGallery = gallery;
+                currentImageIndex = Array.from(images).indexOf(img);
+                openModal();
             });
-
-            nextBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                currentIndex = (currentIndex + 1) % images.length;
-                updateGalleryView();
-            });
-        }
-
-        function updateGalleryView() {
-            images.forEach((img, idx) => {
-                img.classList.toggle('hidden', idx !== currentIndex);
-            });
-        }
-
-        gallery.addEventListener('click', () => {
-            currentGallery = gallery;
-            currentImageIndex = currentIndex;
-            openModal();
         });
+
     });
 
     function openModal() {
