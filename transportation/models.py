@@ -21,6 +21,13 @@ class Transportation(models.Model):
     def __str__(self):
         return f"{self.name} ({self.vehicle_type})"
 
+class TransportationImage(models.Model):
+    vehicle = models.ForeignKey(Transportation, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='transportation/')
+    
+    def __str__(self):
+        return f"Image for {self.vehicle.name}"
+
 class TransportationRental(models.Model):
     vehicle = models.ForeignKey(Transportation, on_delete=models.CASCADE)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
